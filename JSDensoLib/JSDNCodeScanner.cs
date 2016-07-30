@@ -19,14 +19,14 @@ namespace JSDenso
         private readonly Scanner _scanner = new Scanner();
 
         /// <summary>
-        ///     Required designer variable.
-        /// </summary>
-        private IContainer components;
-
-        /// <summary>
         ///     How many times have this scanned
         /// </summary>
         private int _readCount;
+
+        /// <summary>
+        ///     Required designer variable.
+        /// </summary>
+        private IContainer components;
 
         #endregion
 
@@ -38,6 +38,7 @@ namespace JSDenso
         public CodeScanner()
         {
             InitializeComponent();
+            _onLoad();
         }
 
         /// <summary>
@@ -49,6 +50,13 @@ namespace JSDenso
             container.Add(this);
 
             InitializeComponent();
+
+            _onLoad();
+        }
+
+        private void _onLoad()
+        {
+            _scanner.OnDone += _scannerDone;
         }
 
         #endregion
@@ -79,11 +87,6 @@ namespace JSDenso
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-        }
-
-        private void _onLoad()
-        {
-            _scanner.OnDone += OnCodeScanned;
         }
 
         #endregion
@@ -162,15 +165,9 @@ namespace JSDenso
         }
 
         #endregion
-        protected virtual void OnCodeScanned(Object o, EventArgs e)
+
+        public bool Enabled
         {
-            EventHandler<Code> handler = CodeScanned;
-            if (handler != null)
-            {
-                handler(this, _readCode());
-            }
-        }
-        public bool Enabled {
             get { return _scanner.PortOpen; }
             set
             {
@@ -195,16 +192,36 @@ namespace JSDenso
             get { return _readCount; }
         }
 
+        private void _scannerDone(Object o, EventArgs e)
+        {
+            OnCodeScanned(_readCode());
+        }
+
+        /// <summary>
+        ///     Tragger event handler
+        /// </summary>
+        /// <param name="e">result code information</param>
+        protected virtual void OnCodeScanned(Code e)
+        {
+            EventHandler<Code> handler = CodeScanned;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
         public event EventHandler<Code> CodeScanned;
     }
 
     #region class Code: represents an barcode or 2Dcode content
-    public class Code: EventArgs
+
+    public class Code : EventArgs
     {
         public int Length { get; set; }
         public string Text { get; set; }
         public string Type { get; set; }
     }
+
     #endregion
 
     #region Scanner exceptions
