@@ -7,6 +7,7 @@ using ObjectDisposedException = DNWA.Exception.ObjectDisposedException;
 // Created by James Swineson 2016-07-30
 // Contact: dzics@public.swineson.me
 
+// ReSharper disable once CheckNamespace
 namespace JSDenso
 {
     public partial class CodeScanner : Component

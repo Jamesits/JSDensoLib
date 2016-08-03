@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using JSDenso;
 
-namespace SampleApplicationCS
+namespace JSDenso
 {
 	public partial class FormMain : Form
 	{
